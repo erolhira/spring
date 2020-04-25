@@ -1,11 +1,7 @@
 package com.javalopment.workshop.springasync;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /*
  * Reading:
@@ -18,26 +14,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  *
  */
 @SpringBootApplication
-public class SpringAsyncSamplesApplication {
-
-	@Value("${pool.size}")
-	private Integer poolSize;
-	
-	@Value("${pool.size.max}")
-	private Integer maxPoolSize;
+public class SpringAsyncSamplesApplication {	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringAsyncSamplesApplication.class, args);
 	}
-	
-	@Bean("customTaskExecutor")
-	public TaskExecutor setupCustomTaskExecutor() {
 		
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(poolSize);
-		executor.setMaxPoolSize(maxPoolSize);
-		executor.setWaitForTasksToCompleteOnShutdown(true);
-		executor.setThreadNamePrefix("customTaskExecutor");
-		return executor;
-	}
 }

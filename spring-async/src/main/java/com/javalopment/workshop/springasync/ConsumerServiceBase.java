@@ -10,30 +10,41 @@ import org.springframework.util.StopWatch;
  */
 public abstract class ConsumerServiceBase {	
 	
-	@Value("#{1000 / ${consumer.tps}}")
+	@Value("#{1000 / (${consumer.tps.max} / ${pool.size.max})}")
 	private Long minFrameInMillis;
 	
-	public abstract void consume();
+	public abstract void consumeSingle();
+	public abstract void consumeMultiple();
 	
-	/*
-	 * if tps 4 and threadPoolSize is 2;
-	 * @Scheduled ignores maxThreadPoolSize and 4 calls in one second are made asynchronously with two threads. 
-	 */
-	@Async("customTaskExecutor")
-    //@Scheduled(fixedRateString = "#{1000 / ${consumer.tps}}")
-	@Scheduled(fixedRate = 1)
-    public void consumeScheduled() {
+	@Async("customTaskExecutor")    
+	@Scheduled(fixedDelay = 1000, initialDelay = 1000000000L)
+	//@Scheduled(fixedRateString = "#{1000 / ${consumer.tps}}")	
+    public void consumeOneAtATime() {
         
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try {			
-			consume();
+			consumeSingle();
 		} finally {
 			stopWatch.stop();
 			sleep(stopWatch.getLastTaskTimeMillis());
 		}
     }
 
+	@Async("customTaskScheduler")
+	@Scheduled(fixedRate = 1)
+    public void consumeMultipleAtATime() {
+        
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		try {			
+			consumeMultiple();
+		} finally {
+			stopWatch.stop();
+			sleep(stopWatch.getLastTaskTimeMillis());
+		}
+    }
+	
 	private void sleep(long durationOfTask) {
 		try {
 			if(minFrameInMillis > durationOfTask) {				
