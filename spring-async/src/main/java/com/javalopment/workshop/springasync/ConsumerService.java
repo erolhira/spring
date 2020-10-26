@@ -1,7 +1,6 @@
 package com.javalopment.workshop.springasync;
 
 import java.util.Date;
-import java.util.concurrent.Executor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 @EnableScheduling
 public class ConsumerService extends ConsumerServiceBase {
 
-	@Autowired Executor customTaskExecutor;
+	
 	@Autowired TaskScheduler customTaskScheduler;
 	
 	@Override
@@ -29,10 +28,10 @@ public class ConsumerService extends ConsumerServiceBase {
 
 	
 	@Override
-	public void consumeMultiple() {
+	public void consumeMultiple(String param) {
 		
 		ThreadPoolTaskScheduler executor = (ThreadPoolTaskScheduler) customTaskScheduler;
 		Integer activeThreadCount = executor.getActiveCount();
-		System.out.println(new Date() + " -- " + Thread.currentThread().getName() + " -- activeThreadCount: " + activeThreadCount);
+		System.out.println(param + " -- " + new Date() + " -- " + Thread.currentThread().getName() + " -- activeThreadCount: " + activeThreadCount);
 	}
 }

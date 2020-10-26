@@ -46,7 +46,9 @@ public class TaskExecutorConfig {
 	}
 	
 	@Bean("customTaskScheduler")
-	public TaskScheduler setupCustomTaskScheduler() {
+	public TaskScheduler setupCustomTaskScheduler(@Value("${test.parameter}") String test) {
+		
+		System.out.println(test);
 		
 		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();		 
 		scheduler.setPoolSize(poolSize);
