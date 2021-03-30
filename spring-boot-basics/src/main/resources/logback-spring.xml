@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	
+	<property name="LOGS_POSTFIX" value="-log" />
+	<springProperty scope="context" name="logPath" source="logging.path"/> <!-- logging.path comes from properties file. -->
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	
+	<!-- appender names used for root in base.xml -> CONSOLE, FILE -->
+	
+	<!-- more appenders -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+	    <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+	    <encoder>
+	      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+	    </encoder>
+	</appender>
+	
+	<appender name="FILE_APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	    <file>${logPath}/myApp${LOGS_POSTFIX}.log</file>
+	    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+	        <Pattern>
+	            %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+	        </Pattern>
+	    </encoder>
+	
+	    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	        <!-- rollover daily -->
+	        <fileNamePattern>${LOGS_HOME}/myApp_log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	            <maxFileSize>10MB</maxFileSize>
+	        </timeBasedFileNamingAndTriggeringPolicy>
+	    </rollingPolicy>
+	</appender>
+	
+	<!-- more loggers -->
+	
+	<!-- here no apppender is set for sample.logback, so appenders of root are used. -->
+	<logger name="sample.logback" level="DEBUG" />
+	
+	<!-- By default, a log message will be displayed by the logger which writes it, as well as the ancestor loggers. 
+	And, since root is the ancestor of all loggers, all messages will also be displayed by the root logger.
+	To disable this behavior, you need to set the additivity=false property on the logger element -->
+	<springProfile name="dev,local">
+		<logger name="sample.logback" level="TRACE" />
+		<logger name="app.log" level="DEBUG" additivity="false">
+			<appender-ref ref="FILE_APP" />
+		</logger>
+	</springProfile>		
+	
+</configuration>

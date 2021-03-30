@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+In practice, you do not need to provide a version for any of the dependencies in your build configuration, 
+as Spring Boot manages that for you. 
+When you upgrade Spring Boot itself, these dependencies are upgraded as well in a consistent way.
+
+Spring BOM(Build-Of-Materials) gives you pivotal's best and tested snapshot for a given version of Spring.
+You then reference the libraries you want to use without stating version number. 
+ -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.microworkshop.springboot</groupId>
+	<artifactId>sample0_spring-boot-basics</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>sample0_spring-boot-basics</name>
+	<description>Spring Boot Basics</description>
+
+	<!-- Inherit defaults from Spring Boot -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.3.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		
+		<!-- you can also override individual dependencies by overriding a property in your own project. 
+		List of supported properties can be found:
+		https://github.com/spring-projects/spring-boot/blob/v2.0.4.RELEASE/spring-boot-project/spring-boot-dependencies/pom.xml
+		or can be found in effective pom.
+		-->
+		<commons-codec.version>1.10</commons-codec.version>
+		
+	</properties>	
+	
+	<!-- Spring Boot dependencies use the org.springframework.boot groupId. 
+	Typically, your Maven POM file inherits from the spring-boot-starter-parent project 
+	and declares dependencies to one or more "Starters". -->	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>				
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- 
+			list of properties applied by dev-tools:
+			https://github.com/spring-projects/spring-boot/blob/v2.0.4.RELEASE/spring-boot-project/spring-boot-devtools/src/main/java/org/springframework/boot/devtools/env/DevToolsPropertyDefaultsPostProcessor.java
+		 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>			
+		
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.microworkshop.springboot</groupId>
+			<artifactId>spring-lib-sample</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+		
+			<!-- To create an executable jar, we need to add the spring-boot-maven-plugin to our pom.xml
+			If you do not use the parent POM, you need to declare this configuration yourself:
+			https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/maven-plugin/usage.html
+			-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
